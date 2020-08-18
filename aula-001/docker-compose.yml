@@ -1,0 +1,21 @@
+version: '3.7'
+services: 
+    redis_db:
+        image: redis
+        command: redis-server
+        ports: 
+            - 6379:6379
+        volumes: 
+            - './tmp/redis:/var/lib/redis/data'
+    web:
+        build: .
+        command: bash -c "python app.py"
+        ports: 
+            - 5000:80
+        volumes: 
+            - .:/app
+        depends_on: 
+            - redis_db
+        links:
+            - redis_db
+    
